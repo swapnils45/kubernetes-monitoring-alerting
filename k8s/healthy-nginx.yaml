@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-demo
+  namespace: default
+  labels:
+    app.kubernetes.io/name: nginx-demo
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.27
+      ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP

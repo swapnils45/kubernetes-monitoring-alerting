@@ -1,0 +1,24 @@
+# Kubernetes observability architecture
+
+```mermaid
+flowchart LR
+  Browser[Local browser]
+  subgraph EC2[AWS EC2 Ubuntu]
+    Docker[Docker Engine]
+    subgraph Cluster[Kind: observability]
+      Workload[Sample and test pods]
+      KSM[kube-state-metrics]
+      Prom[Prometheus]
+      Grafana[Grafana dashboard and alert]
+      AM[Alertmanager]
+      Workload -->|Kubernetes object metrics| KSM
+      KSM -->|scrape| Prom
+      Prom -->|PromQL queries| Grafana
+      Prom -->|Prometheus alerts| AM
+    end
+    Docker --> Cluster
+  end
+  Browser -->|SSH tunnel and port-forward| Grafana
+```
+
+This architecture reflects the completed Kind-on-EC2 lab. It is not an EKS design. Alertmanager is installed as part of the chart; the custom Grafana alert was evaluated in Grafana and external delivery was not configured.
